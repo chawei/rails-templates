@@ -49,6 +49,13 @@ END
 run 'cp config/database.yml.example config/database.yml'
 
 
+# jquery
+if yes?('Replace prototype/scriptaculous with jquery?')
+  run 'rm -f public/javascripts/*'
+  run 'curl -L http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js > public/javascripts/jquery.js'
+end
+
+
 # set up git repository for this project
 # ignore the usual stuff and make the first commit
 git :init
