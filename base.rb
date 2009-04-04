@@ -1,8 +1,9 @@
+test_gem = ask("How will you test?\n\n[1] Shoulda\n[2] Rspec")
+jquery = yes?('Replace prototype/scriptaculous with jQuery?')
+
 # gems
 gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
 gem 'RedCloth', :lib => 'redcloth'
-
-test_gem = ask("How will you test?\n\n[1] Shoulda\n[2] Rspec")
 
 # the gem command currently doesn't support specific environments
 # so we have to edit config/environments/test.rb directly
@@ -51,7 +52,7 @@ run 'cp config/database.yml.example config/database.yml'
 
 
 # jquery
-if yes?('Replace prototype/scriptaculous with jquery?')
+if jquery
   run 'rm -f public/javascripts/*'
   run 'curl -L http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js > public/javascripts/jquery.js'
 end
