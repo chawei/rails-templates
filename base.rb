@@ -1,11 +1,11 @@
+# gems
 gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
 gem 'RedCloth', :lib => 'redcloth'
 
-# the gem command currently doesn't support specific environments
-# so we have to edit config/environments/test.rb directly
-
 test_gem = ask("How will you test?\n\n[1] Shoulda\n[2] Rspec")
 
+# the gem command currently doesn't support specific environments
+# so we have to edit config/environments/test.rb directly
 file 'config/environments/test.rb', <<-END
 #{File.read('config/environments/test.rb')}
 config.gem 'cucumber', :lib => false, :version => '>= 0.2.2'
@@ -16,6 +16,7 @@ END
 rake('gems:install', :sudo => true)
 
 
+# generators
 generate('cucumber')
 generate('rspec') if test_gem == '2'
 
