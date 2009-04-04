@@ -16,6 +16,9 @@ END
 rake('gems:install', :sudo => true)
 
 
+generate('cucumber')
+generate('rspec') if test_gem == '2'
+
 # generate a database.yml.example that uses mysql
 # and replace database.yml with it also
 file 'config/database.yml.example', <<-END
