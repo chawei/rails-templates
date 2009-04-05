@@ -11,7 +11,8 @@ file 'config/environments/test.rb', <<-END
 #{File.read('config/environments/test.rb')}
 config.gem 'cucumber', :lib => false, :version => '>= 0.2.2'
 config.gem 'webrat', :lib => false, :version => '>= 0.4.3'
-#{if test_gem == '1' then "config.gem 'thoughtbot-shoulda', :lib => 'shoulda', :source => 'http://gems.github.com'" elsif test_gem == '2' then "config.gem 'rspec', :lib => false, :version => '>= 1.2.0'\nconfig.gem 'rspec-rails', :lib => false, :version => '>= 1.2.0'" end}
+config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :version => '>= 1.2.0', :source => 'http://gems.github.com'
+#{if test_gem == '1' then "config.gem 'thoughtbot-shoulda', :lib => 'shoulda', :version => '>= 2.10.1', :source => 'http://gems.github.com'" elsif test_gem == '2' then "config.gem 'rspec', :lib => false, :version => '>= 1.2.0'\nconfig.gem 'rspec-rails', :lib => false, :version => '>= 1.2.0'" end}
 END
 
 rake('gems:install', :sudo => true)
