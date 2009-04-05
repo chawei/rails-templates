@@ -1,5 +1,7 @@
-test_gem = ask("How will you test?\n\n[1] Shoulda\n[2] Rspec")
-jquery = yes?('Replace prototype/scriptaculous with jQuery?')
+test_gem  = ask("How will you test?\n\n[1] Shoulda\n[2] Rspec")
+jquery    = yes?('Replace prototype/scriptaculous with jQuery?')
+db_prefix = ask("What’s your db prefix? (eg. \#{db_prefix}_development)")
+db_prefix = 'app' if db_prefix.blank?
 
 # gems
 gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
@@ -31,7 +33,7 @@ development:
   host: localhost
   user: root
   password:
-  database: app_development
+  database: #{db_prefix}_development
 
 test:
   adapter: mysql
@@ -39,17 +41,18 @@ test:
   host: localhost
   user: root
   password:
-  database: app_test
+  database: #{db_prefix}_test
 
-production:
-  adapter: mysql
-  encoding: utf8
-  host: localhost
-  user: root
-  password:
-  database: app_production
+# production:
+#   adapter: mysql
+#   encoding: utf8
+#   host: localhost
+#   user: root
+#   password:
+#   database: #{db_prefix}_production
 END
 run 'cp config/database.yml.example config/database.yml'
+rake 'db:create:all'
 
 
 # jquery
