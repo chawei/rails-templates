@@ -155,8 +155,9 @@ end
 #End Authentication Setup
 
 #make sure all gems are installed
-rake('gems:install', :sudo => true)
+run 'rake gems:install'
 #end all gem install
+
 #Setup Git
 git :init
 
