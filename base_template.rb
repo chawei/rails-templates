@@ -42,6 +42,9 @@ db_type = ask("What database type(sqlite)?\n\n[1] mysql\n[2] sqlite")
 db_type = '2' if db_type.blank?
 
 if db_type == '1' then 
+  db_host = ask("What’s your db hostname?(localhost)")
+  db_host = 'localhost' if db_host.blank?
+
   db_user = ask("What’s your db username?")
   db_user = 'root' if db_user.blank?
   
