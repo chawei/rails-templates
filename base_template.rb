@@ -135,7 +135,8 @@ if use_auth == '1'
   if use_auth_type == '1' then
     plugin 'restful-authentication', :git => 'git://github.com/technoweenie/restful-authentication.git', :submodule => true
   else 
-    plugin 'authlogic', :git => 'git://github.com/binarylogic/authlogic.git', :submodule => true
+    gem 'authlogic', :lib => 'authlogic', :source => 'http://gems.github.com'
+    #plugin 'authlogic', :git => 'git://github.com/binarylogic/authlogic.git', :submodule => true
   end
 
   use_openid  = ask("Install OpenId?(No)\n\n[1] Yes\n[2] No")
