@@ -103,23 +103,26 @@ run "curl -L http://jqueryjs.googlecode.com/svn/trunk/plugins/form/jquery.form.j
 # Install plugins
 gem 'Mysql', :lib => 'mysql'
 gem 'sqlite3-ruby', :lib => 'sqlite3'
+gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
+gem 'RedCloth', :lib => 'redcloth'
+gem 'hpricot', :source => 'http://code.whytheluckystiff.net'
+gem 'RedCloth', :lib => 'redcloth'
 
 #plugin 'will_paginate', :git => 'git://github.com/mislav/will_paginate.git', :submodule => true
 plugin 'acts_as_taggable_redux', :svn => 'http://svn.devjavu.com/geemus/rails/plugins/acts_as_taggable_redux', :submodule => true
-plugin 'rspec', :git => 'git://github.com/dchelimsky/rspec.git', :submodule => true
-plugin 'rspec-rails', :git => 'git://github.com/dchelimsky/rspec-rails.git', :submodule => true
-plugin 'exception_notifier', :git => 'git://github.com/rails/exception_notification.git', :submodule => true
-plugin 'asset_packager', :git => 'git://github.com/sbecker/asset_packager.git', :submodule => true
-plugin 'factory_girl', :git => 'git://github.com/thoughtbot/factory_girl.git', :submodule => true
-plugin 'shoulda', :git => 'git://github.com/thoughtbot/shoulda.git', :submodule => true
-plugin 'quietbacktrace', :git => 'git://github.com/thoughtbot/quietbacktrace.git', :submodule => true
-plugin 'aasm', :git => 'git://github.com/rubyist/aasm.git', :submodule => true
 
-plugin 'cucumber', :git => 'git://github.com/aslakhellesoy/cucumber.git', :submodule => true 
-plugin 'redgreen', :git => 'git://github.com/JackDanger/jspec_red_green.git', :submodule => true 
+#plugin 'rspec', :git => 'git://github.com/dchelimsky/rspec.git', :submodule => true
+#plugin 'rspec-rails', :git => 'git://github.com/dchelimsky/rspec-rails.git', :submodule => true
+#plugin 'exception_notifier', :git => 'git://github.com/rails/exception_notification.git', :submodule => true
+#plugin 'asset_packager', :git => 'git://github.com/sbecker/asset_packager.git', :submodule => true
+#plugin 'factory_girl', :git => 'git://github.com/thoughtbot/factory_girl.git', :submodule => true
+#plugin 'shoulda', :git => 'git://github.com/thoughtbot/shoulda.git', :submodule => true
+#plugin 'quietbacktrace', :git => 'git://github.com/thoughtbot/quietbacktrace.git', :submodule => true
+#plugin 'aasm', :git => 'git://github.com/rubyist/aasm.git', :submodule => true
 
-gem 'hpricot', :source => 'http://code.whytheluckystiff.net'
-gem 'RedCloth', :lib => 'redcloth'
+#plugin 'cucumber', :git => 'git://github.com/aslakhellesoy/cucumber.git', :submodule => true 
+#plugin 'redgreen', :git => 'git://github.com/JackDanger/jspec_red_green.git', :submodule => true 
+
 
 #Installing Authentication Plugins
 use_auth  = ask("Install User Authentication?(Yes)\n\n[1] Yes\n[2] No")
@@ -161,8 +164,8 @@ run 'rake gems:install'
 #Setup Git
 git :init
 
-run 'git config --global user.name "'+full_name+'"'
-run 'git config --global user.email '+email
+run 'git config --global user.name "#{full_name}"'
+run 'git config --global user.email "#{email}"'
 
 file ".gitignore", <<-END
 .DS_Store
@@ -207,9 +210,9 @@ generate :controller, "articles index"
 #end common controllers
 
 #setup routes
+route "map.root :controller => 'dashboard'"
 route "map.resources :controller => 'articles'"
 route "map.resources :controller => 'dashboard'"
-route "map.root :controller => 'dashboard'"
 #end routes
 
 
