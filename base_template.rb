@@ -122,11 +122,12 @@ gem 'hpricot', :source => 'http://code.whytheluckystiff.net'
 gem 'RedCloth', :lib => 'redcloth'
 
 #Installing Authentication Plugins
-use_auth  = ask("Install User Authentication?\n\n[1] Yes\n[2] No")
-use_auth = '1' if full_name.blank?
+use_auth  = ask("Install User Authentication?(Yes)\n\n[1] Yes\n[2] No")
+use_auth = '1' if use_auth.blank?
 
 if use_auth == '1'
-  use_auth_type  = ask("Which Authentication?\n\n[1] Restful\n[2] Authlogic")
+  use_auth_type  = ask("Which Authentication?(Authlogic)\n\n[1] Restful\n[2] Authlogic")
+  use_auth_type = '2' if use_auth_type.blank?
 
   if use_auth_type == '1' then
     plugin 'restful-authentication', :git => 'git://github.com/technoweenie/restful-authentication.git', :submodule => true
@@ -134,7 +135,7 @@ if use_auth == '1'
     plugin 'authlogic', :git => 'git://github.com/binarylogic/authlogic.git', :submodule => true
   end
 
-  use_openid  = ask("Install OpenId?\n\n[1] Yes\n[2] No")
+  use_openid  = ask("Install OpenId?(No)\n\n[1] Yes\n[2] No")
   use_openid = '2' if use_openid.blank?
 
   if use_openid == '1' then
@@ -142,7 +143,7 @@ if use_auth == '1'
     plugin 'open_id_authentication', :git => 'git://github.com/rails/open_id_authentication.git', :submodule => true
   end
 
-  use_role_requirement  = ask("Install Role Requirement?\n\n[1] Yes\n[2] No")
+  use_role_requirement  = ask("Install Role Requirement?(No)\n\n[1] Yes\n[2] No")
   use_role_requirement = '2' if use_role_requirement.blank?
 
   if use_role_requirement == '1' then
@@ -199,8 +200,19 @@ rake('gems:install', :sudo => true)
 #doing initial commit
 git :add => ".", :commit => "-m 'initial commit'"
 
+#build common controllers
 generate :controller, "dashboard index"
+generate :controller, "articles index"
+#end common controllers
+
+#setup routes
+route "map.resources :controller => 'articles'"
+route "map.resources :controller => 'dashboard'"
 route "map.root :controller => 'dashboard'"
+#end routes
+
+
+
 git :add => ".", :commit => "-m 'adding dashboard controller'"
 
 
