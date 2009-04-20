@@ -98,8 +98,12 @@ run 'curl -L http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js > public/j
 run "curl -L http://jqueryjs.googlecode.com/files/jquery-1.2.6.min.js > public/javascripts/jquery-1.2.6.min.js"
 run "curl -L http://jqueryjs.googlecode.com/svn/trunk/plugins/form/jquery.form.js > public/javascripts/jquery.form.js"
 
-# Install submoduled plugins
+# Install plugins
+gem 'Mysql', :lib => 'mysql'
+gem 'sqlite3-ruby', :lib => 'sqlite3'
+
 plugin 'will_paginate', :git => 'git://github.com/mislav/will_paginate.git', :submodule => true
+plugin 'acts_as_taggable_redux', :svn => 'http://svn.devjavu.com/geemus/rails/plugins/acts_as_taggable_redux', :submodule => true
 plugin 'rspec', :git => 'git://github.com/dchelimsky/rspec.git', :submodule => true
 plugin 'rspec-rails', :git => 'git://github.com/dchelimsky/rspec-rails.git', :submodule => true
 plugin 'exception_notifier', :git => 'git://github.com/rails/exception_notification.git', :submodule => true
@@ -107,12 +111,11 @@ plugin 'asset_packager', :git => 'git://github.com/sbecker/asset_packager.git', 
 plugin 'factory_girl', :git => 'git://github.com/thoughtbot/factory_girl.git', :submodule => true
 plugin 'shoulda', :git => 'git://github.com/thoughtbot/shoulda.git', :submodule => true
 plugin 'quietbacktrace', :git => 'git://github.com/thoughtbot/quietbacktrace.git', :submodule => true
-plugin 'acts_as_taggable_redux', :svn => 'http://svn.devjavu.com/geemus/rails/plugins/acts_as_taggable_redux', :submodule => true
 plugin 'aasm', :git => 'git://github.com/rubyist/aasm.git', :submodule => true
+
 plugin 'cucumber', :git => 'git://github.com/aslakhellesoy/cucumber.git', :submodule => true 
 plugin 'redgreen', :git => 'git://github.com/JackDanger/jspec_red_green.git', :submodule => true 
-gem 'ruby-openid', :lib => 'openid'
-gem 'sqlite3-ruby', :lib => 'sqlite3'
+
 gem 'hpricot', :source => 'http://code.whytheluckystiff.net'
 gem 'RedCloth', :lib => 'redcloth'
 
@@ -133,6 +136,7 @@ if use_auth == '1'
   use_openid = '2' if use_openid.blank?
 
   if use_openid == '1' then
+    gem 'ruby-openid', :lib => 'openid'
     plugin 'open_id_authentication', :git => 'git://github.com/rails/open_id_authentication.git', :submodule => true
   end
 
