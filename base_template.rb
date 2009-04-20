@@ -102,7 +102,7 @@ run "curl -L http://jqueryjs.googlecode.com/svn/trunk/plugins/form/jquery.form.j
 gem 'Mysql', :lib => 'mysql'
 gem 'sqlite3-ruby', :lib => 'sqlite3'
 
-plugin 'will_paginate', :git => 'git://github.com/mislav/will_paginate.git', :submodule => true
+#plugin 'will_paginate', :git => 'git://github.com/mislav/will_paginate.git', :submodule => true
 plugin 'acts_as_taggable_redux', :svn => 'http://svn.devjavu.com/geemus/rails/plugins/acts_as_taggable_redux', :submodule => true
 plugin 'rspec', :git => 'git://github.com/dchelimsky/rspec.git', :submodule => true
 plugin 'rspec-rails', :git => 'git://github.com/dchelimsky/rspec-rails.git', :submodule => true
@@ -151,6 +151,9 @@ end
 
 #End Authentication Setup
 
+#make sure all gems are installed
+rake('gems:install', :sudo => true)
+#end all gem install
 #Setup Git
 git :init
 
