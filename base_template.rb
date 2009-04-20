@@ -2,6 +2,8 @@
 day, month, year = Time.now.day, Time.now.month, Time.now.year
 
 #Adding Author and Company Info
+project  = ask("What is the title of the project?\n>")
+project = 'My Project' if project.blank?
 
 email  = ask("What Email Address should this be assigned to?")
 email = 'user@gmail.com' if email.blank?
