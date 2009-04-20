@@ -1,20 +1,21 @@
+run "clear"
 #Setting Time and Date
 day, month, year = Time.now.day, Time.now.month, Time.now.year
 
 #Adding Author and Company Info
-project  = ask("What is the title of the project?\n>")
+project  = ask("What is the title of the project?(My Project) >")
 project = 'My Project' if project.blank?
 
-email  = ask("Authors Email Address?")
+email  = ask("Authors Email Address?(user@gmail.com) >")
 email = 'user@gmail.com' if email.blank?
 
-full_name = ask("What is the authors full name?")
+full_name = ask("What is the authors full name?(Anonymous) >")
 company = 'Anonymous' if full_name.blank?
 
-company = ask("What is your authors company name?")
+company = ask("What is your authors company name?(Company Name) >")
 company = 'Company Name' if company.blank?
 
-company_url = ask("What is your authors company url?")
+company_url = ask("What is your authors company url?(http://yourdomain.com) >")
 company_url = 'http://yourdomain.com' if company_url.blank?
 
 file "README", <<-END
