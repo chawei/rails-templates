@@ -90,7 +90,8 @@ rake 'db:create:all'
 
 #end setting up databases
 
-test_gem  = ask("How will you test?\n\n[1] Shoulda\n[2] Rspec")
+test_gem  = ask("How will you test?(Rspec)\n\n[1] Shoulda\n[2] Rspec")
+test_gem = '2' if test_gem.blank?
 
 #Installing javascripts & plugins
 
