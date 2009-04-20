@@ -5,7 +5,7 @@ day, month, year = Time.now.day, Time.now.month, Time.now.year
 project  = ask("What is the title of the project?\n>")
 project = 'My Project' if project.blank?
 
-email  = ask("What Email Address should this be assigned to?")
+email  = ask("Authors Email Address?")
 email = 'user@gmail.com' if email.blank?
 
 full_name = ask("What is the authors full name?")
@@ -43,10 +43,10 @@ db_type = '2' if db_type.blank?
 
 if db_type == '1' then 
   db_user = ask("What’s your db username?")
-  db_user = 'root' if db_prefix.blank?
+  db_user = 'root' if db_user.blank?
   
   db_pass = ask("What’s your db password?")
-  db_pass = '' if db_prefix.blank?
+  db_pass = '' if db_pass.blank?
 
   db_prefix = ask("What’s your db prefix? (eg. \#{db_prefix}_development)")
   db_prefix = '' if db_prefix.blank?
