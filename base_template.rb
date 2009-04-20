@@ -1,7 +1,23 @@
-run "echo Speeduneed Inc > README"
+day, month, year = Time.now.day, Time.now.month, Time.now.year
 
-run 'git config --global user.name "Paul Kruger"'
-run 'git config --global user.email paul@miamiphp.org'
+email  = ask("What Email Address should this be assigned to?")
+email = 'user@gmail.com' if email.blank?
+
+full_name = ask("What is the authors full name?")
+company = 'Anonymous' if full_name.blank?
+
+company = ask("What is your authors company name?")
+company = 'Company Name' if company.blank?
+
+file "README", <<-END
+##
+# Project: #{project}
+# Author: #{full_name}
+# Email: #{email}
+# Company: #{company}
+# Date Created: #{month}/#{day}/#{year}
+##
+END
 
 # Delete unnecessary files
 run "rm public/index.html"
@@ -12,6 +28,9 @@ run "cp config/database.yml config/example_database.yml"
 
 #Setup Git
 git :init
+
+run 'git config --global user.name "'+full_name+'"'
+run 'git config --global user.email '+email
 
 file ".gitignore", <<-END
 .DS_Store
