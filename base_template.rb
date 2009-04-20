@@ -20,7 +20,6 @@ company_url = 'http://yourdomain.com' if company_url.blank?
 file "README", <<-END
 ##
 # Project: #{project}
-# App Name: #{appname}
 # Author: #{full_name}
 # Email: #{email}
 # Company: #{company}
