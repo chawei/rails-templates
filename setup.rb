@@ -15,11 +15,10 @@ if File.exists?("../config.rb")
   load '../config.rb'
 else 
   config = github_url + "config.rb"
-  code = open(config).read
-  eval(code)
+  eval(open(config).read)
+puts "1:" +full_name
 end
-
-puts full_name
+puts "2:" +full_name
 
 #loading template options
 #templates_url = github_url + "templates.rb"
