@@ -6,6 +6,16 @@
 # Date Created: April 23 2009
 #This file is for your general github setting and default choices
 ##
+def load_template_b(template)
+  begin
+    code = open(template).read
+    in_root { self.eval(code) }
+  rescue LoadError
+    raise "The template [#{template}] could not be loaded."
+  rescue LoadError, Errno::ENOENT => e
+    raise "The template [#{template}] could not be loaded. Error: #{e}"
+  end
+end
 
 nickname = 'miamiphp'
 
@@ -15,14 +25,14 @@ if File.exists?("../config.rb")
   load '../config.rb'
 else 
   config = github_url + "config.rb"
-  load config
+  load_template_b config
 end
 
 puts full_name
 
 #loading template options
-templates_url = github_url + "templates.rb"
-load_template templates_url
+#templates_url = github_url + "templates.rb"
+#load_template templates_url
 
 
 #templates.inspect
