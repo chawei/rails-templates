@@ -27,35 +27,54 @@ file "README", <<-END
 ##
 END
 
+# Configuration
+file "config/application.yml.example", <<-CODE
+name: #{project}
+email: #{email}
+name: #{full_name}
+address: #{email}
+CODE
 
 #End Adding Company Info
 
 
-run 'script/generate scaffold article title:string body:text alias:string'
+run 'script/generate scaffold article title:string body:text alias:string registered:boolean'
 
 file "test/fixtures/articles.yml", <<-END
 one:
   id: 1
   title: Home Page
   body: Our Home Page
-  alias: 
+  alias: home
+  registered: false
 
 two:
   id: 2
   title: About Us
   body: About Us
   alias: about
+  registered: false
 
 three:
   id: 3
   title: Privacy Policy
   body: Content of Privacy Policy
   alias: privacy
+  registered: false
+
+four:
+  id: 4
+  title: Registered Users Content
+  body: Content of Registered Content Page
+  alias: registered
+  registered: true
 
 END
 
 file "app/controllers/articles_controller.rb", <<-END
 class ArticlesController < ApplicationController
+  before_filter :require_user, :only => [:create, :new, :edit, :update]
+
   # GET /articles
   # GET /articles.xml
   def index
@@ -69,11 +88,20 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1
   # GET /articles/1.xml
+  # GET /articles/1.xml
   def show
     if params[:id].to_i.to_s === params[:id]
       @article = Article.find(params[:id])
     else
       @article = Article.find_by_alias(params[:id])
+    end
+    
+    if @article.registered == true
+      if !defined? @current_user.login
+        flash[:notice] = "Please login to view this Article!"
+        redirect_to :action =>'index'
+        return
+      end
     end
     
     respond_to do |format|
@@ -155,7 +183,11 @@ file "app/views/articles/show.html.erb", <<-END
 END
 file "app/views/articles/index.html.erb", <<-END
 <% @articles.each do |article| %>
-    <%= link_to article.title, article %><br />
+    <% if article.alias != 'home' %>
+      <% if article.registered == false || defined? @current_user.login %>
+        <%= link_to article.title, 'articles/'+article.alias %><br />
+      <% end %>
+    <% end %>
 <% end %>
 END
 =begin
@@ -248,12 +280,32 @@ text-decoration:none;
 }
 END
 
+file "app/views/layouts/_headernav.rhtml", <<-END
+<div id="headernav">
+<%= render :partial => 'layouts/usernav' %>
+<%= render :partial => 'layouts/navigation' %>
+</div>
+END
+
+file "app/views/layouts/_usernav.rhtml", <<-END
+<div id="usernav">
+<% if defined? @current_user.login %>
+	Hi <%=h @current_user.login %> 
+	<a href="/logout">logout1</a>
+	<%= link_to "Logout", :controller => "/logout" %> | 
+<% else %>
+<a href="/login">login1</a>
+<%= link_to "Login", :controller => "/login" %> | 
+<%= link_to "Register", :controller => "/register" %>
+<% end %>
+</div>
+END
+
 file "app/views/layouts/_navigation.rhtml", <<-END
 <div id="navigation">
-	<%= link_to "Home", :controller => "/" %> | 	
+  <%= link_to "Home", :controller => "/" %> | 	
   <%= link_to "Articles", :controller => "articles" %> |
-  <%= link_to "Login", :controller => "/users/login" %> | 
-  <%= link_to_unless_current("About Us", { :action => "about" }) %>
+  <%= link_to "About", :controller => "/articles/about" %>
 </div>
 END
 
@@ -262,8 +314,8 @@ file "app/views/layouts/_footer.rhtml", <<-END
   <%= link_to "Home", :controller => "/" %> | 	
   <%= link_to "Articles", :controller => "articles" %> | 	
   <%= link_to "Exceptions", :controller => "/logged_exceptions" %> | 
-  <%= link_to_unless_current("About Us", { :action => "about" }) %> | 
-  <%= link_to_unless_current("Privacy", { :action => "privacy" }) %>
+  <%= link_to "About", :controller => "/articles/about" %> |
+  <%= link_to "Privacy Policy", :controller => "/articles/privacy" %>
 </div>
 END
 
@@ -272,11 +324,15 @@ file "app/views/layouts/application.html.haml", <<-END
 %html
   %head
     %title | #{project}
+    = javascript_include_tag :defaults
     = stylesheet_link_tag("application")
   %body
     #wrapper
       #header
-        = render :partial => 'layouts/navigation'
+      .logo
+        %a{ :href => "/" } 
+        %img{ :src => "/images/logo.png", :border => "0", :alt => "Logo" }
+      = render :partial => 'layouts/headernav'
       #content
         = yield
       #footer
@@ -310,9 +366,10 @@ if use_auth == '1'
     route 'map.resource :account, :controller => "users"'
     route 'map.resources :users'
     route 'map.resource :user_session'
-    route 'map.root :controller => "user_sessions", :action => "new"'
-    time_real = time.real
-file "db/migrate/@{time_real}_create_users.rb", <<-END
+    #route 'map.root :controller => "user_sessions", :action => "new"'
+
+    time_real = Time.now.utc.strftime("%Y%m%d%H%M%S")
+file "db/migrate/#{time_real}_create_users.rb", <<-END
 class CreateUsers < ActiveRecord::Migration
   def self.up
     create_table :users do |t|
@@ -339,6 +396,57 @@ class CreateUsers < ActiveRecord::Migration
   end
 end
 END
+rake 'db:migrate'
+
+file "app/views/users/_form.erb", <<-END
+<%= form.label :login %><br />
+<%= form.text_field :login %><br />
+<br />
+<%= form.label :password, form.object.new_record? ? nil : "Change password" %><br />
+<%= form.password_field :password %><br />
+<br />
+<%= form.label :password_confirmation %><br />
+<%= form.password_field :password_confirmation %><br />
+END
+file "app/views/users/new.html.erb", <<-END
+<h1>Register</h1>
+ 
+<% form_for @user, :url => account_path do |f| %>
+  <%= f.error_messages %>
+  <%= render :partial => "form", :object => f %>
+  <%= f.submit "Register" %>
+<% end %>
+END
+file "app/views/users/edit.html.erb", <<-END
+<h1>Edit My Account</h1>
+ 
+<% form_for @user, :url => account_path do |f| %>
+  <%= f.error_messages %>
+  <%= render :partial => "form", :object => f %>
+  <%= f.submit "Update" %>
+<% end %>
+ 
+<br /><%= link_to "My Profile", account_path %>
+
+END
+file "app/views/users/new.html.erb", <<-END
+<h1>Register</h1>
+ 
+<% form_for @user, :url => account_path do |f| %>
+  <%= f.error_messages %>
+  <%= render :partial => "form", :object => f %>
+  <%= f.submit "Register" %>
+<% end %>
+END
+file "app/views/users/show.html.erb", <<-END
+<p>
+  Hi <%=h @user.login %>
+  Welcome
+</p>
+ 
+<%= link_to 'Edit', edit_account_path %>
+END
+
 file "app/models/user.rb", <<-END
 class User < ActiveRecord::Base
   acts_as_authentic
@@ -347,7 +455,7 @@ class User < ActiveRecord::Base
    #end # block optional
  end
 END
-file "app/models/user_sessions_controller.rb", <<-END
+file "app/controllers/user_sessions_controller.rb", <<-END
 class UserSessionsController < ApplicationController
   before_filter :require_no_user, :only => [:new, :create]
   before_filter :require_user, :only => :destroy
@@ -373,6 +481,36 @@ class UserSessionsController < ApplicationController
   end
 end
 END
+
+file "app/views/password_resets/new.html.erb", <<-END
+<h1>Forgot Password</h1>
+ 
+Fill out the form below and instructions to reset your password will be emailed to you:<br />
+<br />
+ 
+<% form_tag password_resets_path do %>
+  <label>Email:</label><br />
+  <%= text_field_tag "email" %><br />
+  <br />
+  <%= submit_tag "Reset my password" %>
+<% end %>
+END
+
+file "app/views/password_resets/edit.html.erb", <<-END
+<h1>Change My Password</h1>
+ 
+<% form_for @user, :url => password_reset_path, :method => :put do |f| %>
+  <%= f.error_messages %>
+  <%= f.label :password %><br />
+  <%= f.password_field :password %><br />
+  <br />
+  <%= f.label :password_confirmation %><br />
+  <%= f.password_field :password_confirmation %><br />
+  <br />
+  <%= f.submit "Update my password and log me in" %>
+<% end %>
+END
+
 file "app/views/user_sessions/new.html.erb", <<-END
 <h1>Login</h1>
 <% form_for @user_session, :url => user_session_path do |f| %>
@@ -394,6 +532,7 @@ class ApplicationController < ActionController::Base
   helper :all
   helper_method :current_user_session, :current_user
   filter_parameter_logging :password, :password_confirmation
+  before_filter :current_user_session, :current_user
   
   private
     def current_user_session
@@ -435,7 +574,7 @@ class ApplicationController < ActionController::Base
 end
 END
 
-file "app/controller/users_controller.rb", <<-END
+file "app/controllers/users_controller.rb", <<-END
 class UsersController < ApplicationController
   before_filter :require_no_user, :only => [:new, :create]
   before_filter :require_user, :only => [:show, :edit, :update]
@@ -501,6 +640,10 @@ end
 route "map.root :controller => 'articles', :action => 'show', :id => '1'"
 route "map.resources :controller => 'dashboard'"
 route "map.resources :controller => 'articles'"
+
+route "map.connect 'logout', :controller => 'user_sessions', :action => 'destroy'"
+route "map.connect 'login', :controller => 'user_sessions', :action => 'new'"
+route "map.connect 'register', :controller => 'users', :action => 'new'"
 
 #route 'map.root :controller => "user_sessions", :action => "new"' #options login as default route
 
