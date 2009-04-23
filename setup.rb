@@ -22,9 +22,11 @@ end
 templates_url = github_url + "templates.rb"
 load_template templates_url
 
-templates.each { |template|
-  puts template.name + "\n" 
-} 
+templates.inspect
+
+#templates.each { |template|
+#  puts template.name + "\n" 
+#} 
 
 #loading optional templates
 #templates_url = github_url + "optional.rb"
