@@ -15,14 +15,15 @@ if File.exists?("../config.rb")
   load '../config.rb'
 else 
   config = github_url + "config.rb"
-  load_template config
+  load config
 end
+
+puts full_name
 
 #loading template options
 templates_url = github_url + "templates.rb"
 load_template templates_url
 
-puts full_name
 
 #templates.inspect
 
