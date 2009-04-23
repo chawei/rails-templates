@@ -22,7 +22,9 @@ end
 templates_url = github_url + "templates.rb"
 load_template templates_url
 
-templates.inspect
+puts full_name
+
+#templates.inspect
 
 #templates.each { |template|
 #  puts template.name + "\n" 

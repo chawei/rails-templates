@@ -1,3 +1,5 @@
+puts "Loading config file"
+
 project = 'My Project'
 email = 'paul@miamiphp.org'
 full_name = 'Paul Kruger'
