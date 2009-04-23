@@ -18,5 +18,14 @@ else
   load_template config
 end
 
+#loading template options
+templates_url = github_url + "templates.rb"
+load_template templates_url
 
-#load_template "http://github.com/grillpanda/rails-templates/raw/master/base.rb"
+templates.each { |template|
+  puts template.name + "\n" 
+} 
+
+#loading optional templates
+#templates_url = github_url + "optional.rb"
+#load_template templates_url
