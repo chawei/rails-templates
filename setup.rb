@@ -15,7 +15,7 @@ if File.exists?("../config.rb")
   load '../config.rb'
 else 
   config = github_url + "config.rb"
-  load(open(config).read)
+  eval(open(config).read)
 puts "1:" +full_name
 end
 puts "2:" +full_name
