@@ -1,3 +1,4 @@
+puts "Loading template list"
 #Please Add a file and a description here
 #Base Templates
 templates = [  
