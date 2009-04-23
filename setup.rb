@@ -12,7 +12,7 @@ nickname = 'miamiphp'
 github_url = "http://github.com/#{github_nick}/rails-templates/raw/master/"
 
 File.exists?("../config.rb") then
-  load_template '../config.rb'
+  require '../config.rb'
 else 
   load_template github_url + "config.rb"
 end
