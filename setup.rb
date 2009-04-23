@@ -9,7 +9,7 @@
 def load_template_b(template)
   begin
     code = open(template).read
-    in_root { self.eval(code) }
+    eval(code)
   rescue LoadError
     raise "The template [#{template}] could not be loaded."
   rescue LoadError, Errno::ENOENT => e
