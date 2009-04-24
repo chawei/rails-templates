@@ -17,7 +17,7 @@ else
   config = github_url + "config.rb"
   code = open(config).read
   puts code
-  eval(open(config).read)
+  eval("<% " + code + " %>")
 puts "1:" +full_name
 end
 puts "2:" +full_name
