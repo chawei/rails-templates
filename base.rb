@@ -62,6 +62,14 @@ if jquery
 end
 
 
+# Delete unnecessary files
+run "rm -rf ./app/views/layouts/*"
+run "rm public/index.html"
+run "rm public/favicon.ico"
+run "rm public/robots.txt"
+run "rm public/images/rails.png
+
+
 # set up git repository for this project
 # ignore the usual stuff and make the first commit
 git :init
