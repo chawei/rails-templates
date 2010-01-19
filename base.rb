@@ -58,7 +58,7 @@ rake 'db:create:all'
 # jquery
 if jquery
   run 'rm -f public/javascripts/*'
-  run 'curl -L http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js > public/javascripts/jquery.js'
+  run 'curl -L http://code.jquery.com/jquery-1.4.min.js > public/javascripts/jquery.js'
 end
 
 
